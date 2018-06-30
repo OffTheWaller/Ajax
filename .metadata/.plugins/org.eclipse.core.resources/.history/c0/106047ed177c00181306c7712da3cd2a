@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>jquery ajax练习</title>
+<script src="/WebContent/WEB-INF/js/jquery-1.12.4.js"></script>
+</head>
+<body>
+    <input type="button" value="点击使用ajax获取后台数据">
+    <h3 id="content"></h3>
+    <script>
+        $.ajax({
+            async:true,
+            URL: 'WEB/ajaxServlet',
+            data: {"name":"奥迪"},
+            success: function (data) {
+                document.getElementById('content').innerHTML = data;
+            }
+
+        });
+    </script>
+</body>
+</html>
