@@ -56,7 +56,7 @@ xmlHttp.send()
   - async:默认true,异步请求
   - contentType:默认"application/x-www-form-urlencoded"，发送信息至服务器时内容的编码类型
   - data:发送到服务器的数据
-  - dataType:预期服务器返回的数据类型
+  - dataType:预期服务器返回的数据类型,jsonp为跨域
   - success:请求成功后的回调函数 function() {}
   - error:请求失败时的回调
   - type:请求方式("GET"或"POST")，默认"GET"
@@ -164,4 +164,46 @@ var $={
         }
     }
 }
+```
+
+### jsonp跨域
+- 原理：利用动态创建script标签，向服务器发送一个请求
+- 这个请求并不是xhr的请求，而是一个script请求
+- 使用方法：
+  - 客户端在请求地址的后面拼接?callback=getInfo
+  - 服务端拿到callback函数，并把传递的值当成参数，最后返回给客户端一个getInfo(这里面就是要传递的数据)
+  - 客户端在function getInfo () {}里面写处理数据的逻辑代码即可
+> jsonp需要客户端和服务端都做处理，并且只支持get方式提交
+
+```js
+    document.querySelector('input').onclick = function () {
+      //动态创建script标签
+      var script = document.createElement('script');
+      //把回调函数当做参数传过去，后端需要拿到这个callback，这是后端做的事，把数据包装好
+      //返回给客户端的是这个函数执行
+      script.src = 'https://sug.so.360.cn/suggest?callback=getInfo&encodein=utf-8&encodeout=utf-8&format=json&fields=word&word=n';
+      //把script标签动态插入到body中，就会发一个script请求
+      document.body.appendChild(script);
+    }
+    //这里是处理接收跨域数据后，类似于回调函数
+    //后端返回的直接是这个函数的执行，所以会自动调用你自己定义的回调函数，从而处理获取的数据
+    function getInfo (data) {
+      console.log(data)
+    }
+```
+- jquery给我们封装的$.ajax支持jsonp形式的跨域，只需要把dataType属性设置为jsonp，发送请求即可
+```js
+    $(function () {
+      $('input').on('click', function () {
+        $.ajax({
+          url: 'https://sug.so.360.cn/suggest',
+          data: 'encodein=utf-8&encodeout=utf-8&format=json&fields=word&word=n',
+          type: 'get',
+          dataType: 'jsonp',
+          success: function (data) {
+            console.log(data)
+          }
+        })
+      })
+    });
 ```
