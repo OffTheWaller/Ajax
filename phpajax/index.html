@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>原生Ajax</title>
+</head>
+<body>
+  <input type="button" value="使用ajax">
+  <span></span>
+  <script>
+    
+
+    //ajax原理
+
+    // function ajax (success) {
+    //   var xhr = new XMLHttpRequest();
+    //   xhr.open('post','./index.php');
+    //   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    //   xhr.send('username=zhangsan&password=123');
+    //   xhr.onreadystatechange = function () {
+    //     if (xhr.readyState == 4 && xhr.status == 200) {
+    //       var data = xhr.responseText;
+    //       success(data);
+    //     }
+    //   }
+    // }
+    // document.querySelector('input').onclick = function () {
+    //   ajax(function (res) {
+    //     document.querySelector('span').innerHTML = res;
+    //   });
+    // }
+
+    //写一个函数，传入一个对象，变成参数字符串
+    function params (obj) {
+      var str = '';
+      for (var key in obj) {
+        let mykey = key;
+        let value = obj[key];
+        let newStr = mykey + '=' +value + '&';
+        str += newStr
+      }
+      var result = str.substr(0,str.length - 1);
+      return result;
+    }
+    var param = params({
+      name: 'zhangsan',
+      age: 18
+    });
+    console.log(param)
+  
+  </script>
+</body>
+</html>
