@@ -207,3 +207,11 @@ var $={
       })
     });
 ```
+### CORS跨域
+
+- 通过服务端给客户端输出一个响应头
+  header("Access-Control-Allow-Origin:*");  跨域资源共享
+
+- CORS跨域存在安全性问题，解决方案：1.session验证 2.token验证
+
+  ​
